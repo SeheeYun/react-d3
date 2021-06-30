@@ -21,12 +21,6 @@ const data = [
   },
 ];
 
-const svg = d3
-  .select('.canvas')
-  .append('svg')
-  .attr('width', 600)
-  .attr('height', 600);
-
 // 차트에 여백 만들기
 const margin = {
   top: 20,
@@ -37,6 +31,12 @@ const margin = {
 const graphWidth = 600 - margin.left - margin.right;
 const graphHeight = 600 - margin.top - margin.bottom;
 
+const svg = d3
+  .select('.canvas')
+  .append('svg')
+  .attr('width', 600)
+  .attr('height', 600);
+
 const graph = svg
   .append('g')
   .attr('width', graphWidth)
@@ -46,8 +46,7 @@ const graph = svg
 const xAxisGroup = graph
   .append('g')
   .attr('transform', `translate(0, ${graphHeight})`); // x축 아래로 translate
-
-const yAxisGroup = graph.append('g');
+const yAxisGroup = graph.append('g').attr('stroke', 'orange');
 
 const y = d3
   .scaleLinear()
@@ -73,17 +72,28 @@ rects
   .attr('x', d => x(d.name)) // data index 값 * 70
   .attr('y', d => y(d.orders));
 
-console.log(rects);
-
 // 반환되지 못한 나머지 data 가상 DOM으로 생성 (원래 텅비어있는데 왜 두번해주는건지 모르겠음)
+// rects
+//   .enter()
+//   .append('rect')
+//   .attr('width', x.bandwidth)
+//   .attr('height', d => graphHeight - y(d.orders))
+//   .attr('fill', 'orange')
+//   .attr('x', d => x(d.name))
+//   .attr('y', d => y(d.orders)); // 위에 있는 그래프 뒤집기 (?)
+
 rects
   .enter()
   .append('rect')
   .attr('width', x.bandwidth)
-  .attr('height', d => graphHeight - y(d.orders))
+  .attr('height', d => 0)
   .attr('fill', 'orange')
   .attr('x', d => x(d.name))
-  .attr('y', d => y(d.orders)); // 위에 있는 그래프 뒤집기 (?)
+  .attr('y', graphHeight)
+  .transition() // transition 효과 주기
+  .duration(500)
+  .attr('y', d => y(d.orders)) // 위에 있는 그래프 뒤집기
+  .attr('height', d => graphHeight - y(d.orders));
 
 // x축 y축 (axis) 생성
 const xAxis = d3.axisBottom(x);
