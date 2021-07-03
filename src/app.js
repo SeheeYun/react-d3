@@ -1,7 +1,17 @@
+import { useEffect, useRef } from 'react';
 import './app.css';
 
+const data = [25, 30, 45, 60, 20];
+
 function App() {
-  return <h1>Hello world!</h1>;
+  const svgRef = useRef();
+  console.log(svgRef);
+
+  useEffect(() => {
+    console.log(svgRef);
+  }, []);
+
+  return <svg ref={svgRef}></svg>;
 }
 
 export default App;

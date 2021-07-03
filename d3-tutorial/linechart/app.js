@@ -56,7 +56,7 @@ graph
   .attr('r', 5)
   .attr('cx', d => xScale(d.time))
   .attr('cy', d => yScale(d.value))
-  .style('fill', 'black');
+  .attr('fill', 'black');
 // <-- 점 생성 end -->
 
 const linearGenerator = d3
@@ -71,3 +71,20 @@ graph
   .attr('stroke-width', 2)
   .attr('stroke', 'black');
 // <-- 선 생성 end -->
+
+graph
+  .selectAll('circle')
+  .on('mouseover', function () {
+    d3.select(this)
+      .transition()
+      .duration(100)
+      .attr('r', 12)
+      .attr('fill', 'grey');
+  })
+  .on('mouseleave', function () {
+    d3.select(this)
+      .transition()
+      .duration(100)
+      .attr('r', 5)
+      .attr('fill', 'black');
+  });
