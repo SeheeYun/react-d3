@@ -1,17 +1,8 @@
-import { useEffect, useRef } from 'react';
 import './app.css';
-
-const data = [25, 30, 45, 60, 20];
+import Line from './line';
 
 function App() {
-  const svgRef = useRef();
-  console.log(svgRef);
-
-  useEffect(() => {
-    console.log(svgRef);
-  }, []);
-
-  return <svg ref={svgRef}></svg>;
+  return <Line />;
 }
 
 export default App;
