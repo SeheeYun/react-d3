@@ -1,8 +1,7 @@
 import { axisBottom, axisLeft, scaleBand, scaleLinear, select } from 'd3';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-function Barchart() {
-  const [data, setData] = useState([25, 30, 45, 60, 20, 65, 75]);
+function Barchart({ data }) {
   const svgRef = useRef();
 
   useEffect(() => {
@@ -61,26 +60,10 @@ function Barchart() {
   }, [data]);
 
   return (
-    <>
-      <svg ref={svgRef}>
-        <g className="xAxis_group" />
-        <g className="yAxis_group" />
-      </svg>
-      <button
-        onClick={() => {
-          setData(data.map(d => d + 10));
-        }}
-      >
-        Update data
-      </button>
-      <button
-        onClick={() => {
-          setData(data.filter(d => d <= 35));
-        }}
-      >
-        Filter data
-      </button>
-    </>
+    <svg ref={svgRef}>
+      <g className="xAxis_group" />
+      <g className="yAxis_group" />
+    </svg>
   );
 }
 
