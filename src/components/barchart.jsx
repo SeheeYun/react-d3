@@ -1,5 +1,5 @@
 import { axisBottom, axisLeft, scaleBand, scaleLinear, select } from 'd3';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 function Barchart({ data }) {
   const svgRef = useRef();

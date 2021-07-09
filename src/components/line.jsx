@@ -6,7 +6,7 @@ import {
   scaleLinear,
   select,
 } from 'd3';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 function Line() {
   const [data, setData] = useState([25, 30, 45, 60, 20, 65, 75]);
