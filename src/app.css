@@ -1,3 +1,11 @@
 svg {
   background-color: beige;
+  margin: 20px auto;
+  display: block;
+  overflow: visible;
+}
+
+button {
+  margin: 10px auto;
+  display: block;
 }

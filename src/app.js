@@ -1,8 +1,8 @@
 import './app.css';
-import Line from './line';
+import Barchart from './components/barchart';
 
 function App() {
-  return <Line />;
+  return <Barchart />;
 }
 
 export default App;

@@ -1,4 +1,11 @@
-import { curveCardinal, line, select } from 'd3';
+import {
+  axisRight,
+  axisTop,
+  curveCardinal,
+  line,
+  scaleLinear,
+  select,
+} from 'd3';
 import { useEffect, useRef, useState } from 'react';
 
 function Line() {
@@ -8,15 +15,34 @@ function Line() {
   useEffect(() => {
     const svg = select(svgRef.current);
 
+    const xScale = scaleLinear()
+      .domain([0, data.length - 1])
+      .range([0, 300]);
+    const yScale = scaleLinear() //
+      .domain([0, 75])
+      .range([150, 0]);
+
+    const xAxis = axisTop(xScale)
+      .ticks(7)
+      .tickFormat(i => i + 1);
+    const yAxis = axisRight(yScale);
+
+    svg
+      .select('.xAxis_group')
+      .style('transform', 'translateY(150px)')
+      .call(xAxis);
+    svg.select('.yAxis_group').call(yAxis);
+
     const linearGenerator = line()
-      .x((value, index) => index * 50)
-      .y(value => 150 - value)
+      .x((d, i) => xScale(i))
+      .y(d => yScale(d))
       .curve(curveCardinal);
 
     svg
-      .selectAll('path')
+      .selectAll('.line')
       .data([data])
       .join('path')
+      .attr('class', 'line')
       .attr('d', d => linearGenerator(d))
       .attr('fill', 'none')
       .attr('stroke', 'blue');
@@ -24,7 +50,10 @@ function Line() {
 
   return (
     <>
-      <svg ref={svgRef}></svg>
+      <svg ref={svgRef}>
+        <g className="xAxis_group" />
+        <g className="yAxis_group" />
+      </svg>
       <button
         onClick={() => {
           setData(data.map(value => value + 5));
