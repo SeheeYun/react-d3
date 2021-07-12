@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import ResizeObserver from 'resize-observer-polyfill';
 
 function useResizeObserver(ref) {
   const [dimensions, setDimensions] = useState(null);
