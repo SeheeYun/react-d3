@@ -1,19 +1,27 @@
 import { axisBottom, axisLeft, scaleBand, scaleLinear, select } from 'd3';
 import React, { useEffect, useRef } from 'react';
+import useResizeObserver from '../hooks/useResizeObserver';
 
 function Barchart({ data }) {
+  const wrapperRef = useRef();
   const svgRef = useRef();
 
+  const dimensions = useResizeObserver(wrapperRef);
+
   useEffect(() => {
+    if (!dimensions) return;
+
     const svg = select(svgRef.current);
 
     const xScale = scaleBand()
       .domain(data.map((d, i) => i))
-      .range([0, 300])
+      .range([0, dimensions.width])
       .padding(0.5);
+
     const yScale = scaleLinear() //
       .domain([0, 150])
-      .range([150, 0]);
+      .range([dimensions.height, 0]);
+
     const colorScale = scaleLinear() //
       .domain([75, 100, 150])
       .range(['green', 'orange', 'red'])
@@ -23,7 +31,7 @@ function Barchart({ data }) {
     const yAxis = axisLeft(yScale);
     svg
       .select('.xAxis_group')
-      .style('transform', 'translateY(150px)')
+      .style('transform', `translateY(${dimensions.height}px)`)
       .call(xAxis);
     svg
       .select('.yAxis_group') //
@@ -50,20 +58,22 @@ function Barchart({ data }) {
       .attr('class', 'bar')
       .style('transform', 'scale(1,-1)')
       .attr('x', (d, i) => xScale(i))
-      .attr('y', -150)
+      .attr('y', -dimensions.height)
       .attr('width', xScale.bandwidth)
       .on('mouseenter', handleMouseEnter)
       .on('mouseleave', () => svg.select('.tooltip').remove())
       .transition()
       .attr('fill', colorScale)
-      .attr('height', d => 150 - yScale(d));
-  }, [data]);
+      .attr('height', d => dimensions.height - yScale(d));
+  }, [data, dimensions]);
 
   return (
-    <svg ref={svgRef}>
-      <g className="xAxis_group" />
-      <g className="yAxis_group" />
-    </svg>
+    <div ref={wrapperRef}>
+      <svg ref={svgRef}>
+        <g className="xAxis_group" />
+        <g className="yAxis_group" />
+      </svg>
+    </div>
   );
 }
 
